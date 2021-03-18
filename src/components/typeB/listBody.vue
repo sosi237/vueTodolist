@@ -60,8 +60,9 @@ export default {
     Modal
   },
   methods: {
-    chkTodo(index){
-
+    chkTodo(detailIdx){
+      // console.log(this.curDate, idx)
+      this.$emit('chkTodo', this.curDate, this.idx, detailIdx);
     },
     isCompleted(){
 

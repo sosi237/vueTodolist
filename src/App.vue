@@ -1,13 +1,13 @@
 <template>
   <div id="app">
     <list-top @addStorage="addStorage"></list-top>
-    <list-body v-bind:todoList="todoList" @removeItem="removeItem"></list-body>
+    <list-body v-bind:todoList="todoList" @removeItem="removeItem" @chkTodo="chkTodo"></list-body>
   </div>
 </template>
 
 <script>
-import ListTop from "./components/test/listTop";
-import ListBody from "./components/test/listBody";
+import ListTop from "./components/typeB/listTop";
+import ListBody from "./components/typeB/listBody";
 export default {
   name: 'app',
   components: {ListBody, ListTop},
@@ -42,24 +42,6 @@ export default {
         }
       }
     },
-
-
-    // addList(){  //로컬 스토리지에 저장된 일정들을 todoList 데이터에 저장
-    //   this.todoList.length = 0;
-    //   if(localStorage.length > 0) {
-    //     let idx = 0;
-    //     for (let i = 0; i < localStorage.length; i++) {
-    //       let key = localStorage.key(i);
-    //       if (key != "loglevel:webpack-dev-server") {
-    //         let obj = {
-    //           'date': key,
-    //           'item': JSON.parse(localStorage.getItem(key))   //배열
-    //         }
-    //         this.todoList.push(obj);
-    //       }
-    //     }
-    //   }
-    // },
     addStorage(newDate, newItem){ // 입력한 일정을 로컬 스토리지에 저장
       let items = [];
       if(this.chkNew(newDate)){  // 해당 날짜에 일정을 등록하는 게 처음이면
@@ -87,6 +69,10 @@ export default {
       } else {
         localStorage.removeItem(date);
       }
+    },
+    chkTodo(date, listIdx, detailIdx){
+      this.todoList[listIdx].items[detailIdx].status = !this.todoList[listIdx].items[detailIdx].status;
+      console.log(this.todoList[listIdx].items[detailIdx].status)
     }
   },
   created() {
