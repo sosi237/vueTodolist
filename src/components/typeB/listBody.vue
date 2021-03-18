@@ -1,0 +1,95 @@
+<template>
+  <div id="bodyBox">
+      <div v-if="todoList.length > 0">
+        <ul>
+          <li v-for="(todo, index) in todoList" :key="todo.date"  @click="showTodo(), showDate(todo.date), setIndex(index)">
+            {{todo.date | toDate}}
+            <span class="todoCnt">| &nbsp;&nbsp;&nbsp;{{todo.items.length}}</span>
+          </li>
+        </ul>
+      </div>
+      <div v-else>
+        <span class="noContent">할 일이 없습니다.</span>
+      </div>
+
+<!--     상세 일정 확인 팝업 모달-->
+    <modal v-show="is_show">
+      <p slot="header">
+        {{this.curDate | toDate}}
+        <span class="closeBtn">
+          <i class="closeModalBtn fas fa-times" aria-hidden="true" @click="showTodo"></i>
+        </span>
+      </p>
+      <ul slot="body">
+        <li v-for="(items, index) in todoList[this.idx].items" :key="items.idx">
+          <input type="checkbox" @change="chkTodo(index)" />
+          {{items.item}}
+          <span class="removeBtn" @click="removeItem(index)">
+            <i class="far fa-trash-alt" aria-hidden="true" ></i>
+          </span>
+        </li>
+      </ul>
+      <p slot="footer"></p>
+    </modal>
+
+  </div>
+</template>
+<script>
+import Modal from "../common/Modal";
+
+export default {
+  props:['todoList'],
+  name: "listBody",
+  data(){
+    return{
+      is_show: false,
+      curDate: "",
+      idx : 0
+    }
+  },
+  filters:{
+    toDate: function (date){
+      let year = date.substring(6);
+      let month = date.substring(0,2);
+      let day = date.substring(3,5);
+      let result = `${year}년 ${month}월 ${day}일`;
+      return result;
+    }
+  },
+  components: {
+    Modal
+  },
+  methods: {
+    chkTodo(index){
+
+    },
+    isCompleted(){
+
+    },
+    showTodo(){
+      this.is_show = !this.is_show;
+    },
+    showDate(date){
+      this.curDate = date;
+    },
+    removeItem(idx){
+      this.$emit('removeItem', this.curDate, idx);
+    },
+    setIndex(index){
+      this.idx = index;
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+#bodyBox ul {width:80%;}
+#bodyBox li {
+  border-style: groove; margin-bottom: 15px; padding:5px;
+}
+.closeBtn, .removeBtn {float: right;}
+ul, li { list-style-type: none;}
+.todoCnt {float: right;}
+
+</style>
