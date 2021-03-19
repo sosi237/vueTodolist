@@ -2,15 +2,17 @@
   <div id="app">
     <list-top @addStorage="addStorage"></list-top>
     <list-body v-bind:todoList="todoList" @removeItem="removeItem" @chkTodo="chkTodo"></list-body>
+    <list-footer @clearAll="clearAll"></list-footer>
   </div>
 </template>
 
 <script>
 import ListTop from "./components/typeB/listTop";
 import ListBody from "./components/typeB/listBody";
+import ListFooter from "./components/typeB/listFooter";
 export default {
   name: 'app',
-  components: {ListBody, ListTop},
+  components: {ListFooter, ListBody, ListTop},
   data () {
     return {
       todoList: []
@@ -40,6 +42,9 @@ export default {
             this.todoList.push(obj);
           }
         }
+        this.todoList.sort(function (a, b){
+          return a.date < b.date ? -1 : (a.date > b.date ? 1 : 0);
+        });
       }
     },
     addStorage(newDate, newItem){ // 입력한 일정을 로컬 스토리지에 저장
@@ -72,7 +77,10 @@ export default {
     },
     chkTodo(date, listIdx, detailIdx){
       this.todoList[listIdx].items[detailIdx].status = !this.todoList[listIdx].items[detailIdx].status;
-      console.log(this.todoList[listIdx].items[detailIdx].status)
+    },
+    clearAll(){
+      localStorage.clear();
+      this.todoList = [];
     }
   },
   created() {

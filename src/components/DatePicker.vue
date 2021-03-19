@@ -7,12 +7,18 @@
 <script>
 export default {
   name: "DatePicker",
+  props: ['newDate'],
   data(){
     return {
       date: ""
     }
   },
   methods:{
+  },
+  watch:{
+    newDate(){
+      this.date = this.newDate;
+    }
   },
   mounted() {
     let vm = this

@@ -1,6 +1,7 @@
 <template>
   <div id="bodyBox">
-      <div v-if="todoList.length > 0">
+<!-- 등록된 일정이 있으면 날짜별로 보여줌 -->
+      <div v-if="todoList && todoList.length > 0">
         <ul>
           <li v-for="(todo, index) in todoList" :key="todo.date"  @click="showTodo(), showDate(todo.date), setIndex(index)">
             {{todo.date | toDate}}
@@ -8,11 +9,12 @@
           </li>
         </ul>
       </div>
-      <div v-else>
+<!--등록된 일정이 없을 경우-->
+      <div class="noContentContainer" v-else>
         <span class="noContent">할 일이 없습니다.</span>
       </div>
 
-<!--     상세 일정 확인 팝업 모달-->
+<!-- 상세 일정 확인 팝업 모달-->
     <modal v-show="is_show">
       <p slot="header">
         {{this.curDate | toDate}}
@@ -20,22 +22,27 @@
           <i class="closeModalBtn fas fa-times" aria-hidden="true" @click="showTodo"></i>
         </span>
       </p>
-      <ul slot="body">
+      <ul slot="body" v-if="todoList && todoList.length > 0">
         <li v-for="(items, index) in todoList[this.idx].items" :key="items.idx">
           <input type="checkbox" @change="chkTodo(index)" />
-          {{items.item}}
+          <span v-bind:class="{'completed' : isCompleted(index)}">{{items.item}}</span>
           <span class="removeBtn" @click="removeItem(index)">
             <i class="far fa-trash-alt" aria-hidden="true" ></i>
           </span>
         </li>
       </ul>
-      <p slot="footer"></p>
+      <p slot="footer">
+        <span class="addBtn" @click="showAddModal">
+          <i class="fas fa-plus"></i>
+        </span>
+      </p>
     </modal>
 
   </div>
 </template>
 <script>
 import Modal from "../common/Modal";
+import EventBus from "./EventBus";
 
 export default {
   props:['todoList'],
@@ -61,11 +68,14 @@ export default {
   },
   methods: {
     chkTodo(detailIdx){
-      // console.log(this.curDate, idx)
       this.$emit('chkTodo', this.curDate, this.idx, detailIdx);
     },
-    isCompleted(){
-
+    isCompleted(detailIdx){
+      return this.todoList[ this.idx].items[detailIdx].status;
+    },
+    showAddModal(){
+      this.is_show = !this.is_show;
+      EventBus.$emit('showAddModal', this.curDate);
     },
     showTodo(){
       this.is_show = !this.is_show;
@@ -89,8 +99,14 @@ export default {
 #bodyBox li {
   border-style: groove; margin-bottom: 15px; padding:5px;
 }
+.completed {text-decoration: line-through;}
 .closeBtn, .removeBtn {float: right;}
 ul, li { list-style-type: none;}
 .todoCnt {float: right;}
-
+.addBtn {
+  float: right;
+}
+.noContentContainer{
+  text-align: center;
+}
 </style>

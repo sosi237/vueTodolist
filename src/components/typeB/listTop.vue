@@ -11,7 +11,7 @@
         <i class="closeModalBtn fas fa-times " aria-hidden="true" @click="showAddModal"></i>
       </p>
       <p slot="body">
-        <DatePicker v-on:inputDate="inputDate" ></DatePicker>
+        <DatePicker v-on:inputDate="inputDate" v-bind:newDate="newDate"></DatePicker>
         <input type="text" placeholder="할일을 입력하세요" v-model="newItem" @keyup.enter="addTodo"/><br />
       </p>
       <p slot="footer">
@@ -24,6 +24,8 @@
 <script>
 import Modal from "../common/Modal";
 import DatePicker from "../DatePicker";
+import EventBus from "./EventBus";
+
 export default {
   name: "listTop",
   components: {
@@ -53,6 +55,13 @@ export default {
     inputDate(date){
       this.newDate= date;
     }
+  },
+  created() {
+    EventBus.$on('showAddModal', (date)=>{
+      this.newDate = date;
+      this.showAddModal();
+    });
+
   }
 }
 </script>
