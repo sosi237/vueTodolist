@@ -3,7 +3,8 @@
 <!-- 등록된 일정이 있으면 날짜별로 보여줌 -->
       <div v-if="todoList && todoList.length > 0">
         <ul>
-          <li v-for="(todo, index) in todoList" :key="todo.date"  @click="showTodo(), showDate(todo.date), setIndex(index)">
+          <li v-for="(todo, index) in todoList" :key="todo.date"
+              @click="showTodo(), showDate(todo.date), setIndex(index)">
             {{todo.date | toDate}}
             <span class="todoCnt">| &nbsp;&nbsp;&nbsp;{{todo.items.length}}</span>
           </li>
@@ -11,11 +12,11 @@
       </div>
 <!--등록된 일정이 없을 경우-->
       <div class="noContentContainer" v-else>
-        <span class="noContent">할 일이 없습니다.</span>
+        <span class="noContent">해야 할 일이 없습니다.</span>
       </div>
 
 <!-- 상세 일정 확인 팝업 모달-->
-    <modal v-show="is_show">
+    <modal v-show="is_show" >
       <p slot="header">
         {{this.curDate | toDate}}
         <span class="closeBtn">
@@ -70,10 +71,10 @@ export default {
     chkTodo(detailIdx){
       this.$emit('chkTodo', this.curDate, this.idx, detailIdx);
     },
-    isCompleted(detailIdx){
+    isCompleted(detailIdx){ // 해당 세부일정이 완료된 상태인지를 반환
       return this.todoList[ this.idx].items[detailIdx].status;
     },
-    showAddModal(){
+    showAddModal(){ // 세부목록 모달을 닫고 해당 날짜가 입력된 add모달 열기
       this.is_show = !this.is_show;
       EventBus.$emit('showAddModal', this.curDate);
     },
@@ -94,7 +95,6 @@ export default {
 </script>
 
 <style scoped>
-
 #bodyBox ul {width:80%;}
 #bodyBox li {
   border-style: groove; margin-bottom: 15px; padding:5px;

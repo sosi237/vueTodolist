@@ -8,7 +8,7 @@
 
     <modal class="modal" v-show="showModal">
       <p slot="header" class="closeBtn">
-        <i class="closeModalBtn fas fa-times " aria-hidden="true" @click="showAddModal"></i>
+        <i class="closeModalBtn fas fa-times " aria-hidden="true" @click="showAddModal(), clearDate()"></i>
       </p>
       <p slot="body">
         <DatePicker v-on:inputDate="inputDate" v-bind:newDate="newDate"></DatePicker>
@@ -54,6 +54,9 @@ export default {
     },
     inputDate(date){
       this.newDate= date;
+    },
+    clearDate(){
+      this.newDate = '';
     }
   },
   created() {
