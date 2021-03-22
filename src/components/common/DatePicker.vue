@@ -1,10 +1,6 @@
 <template>
   <input v-model="date" type="text" name="date"
     id="calendar" placeholder="날짜를 선택해주세요" >
-<!--
-  <input v-model="date" type="text" name="date"
-    ref="calendar" placeholder="날짜를 선택해주세요" >
--->
 
 </template>
 
@@ -25,12 +21,6 @@ export default {
     }
   },
   mounted() {
-    /*let vm = this;
-    this.$refs.calendar.datepicker({
-      onSelect: function (dateText){
-        vm.date = dateText;
-      }
-    });*/
     let vm = this
     $('#calendar').datepicker({
       onSelect: function (dateText){
